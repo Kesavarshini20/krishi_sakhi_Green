@@ -1,0 +1,55 @@
+/* Kerala Farmers Portal - Shared Styles */
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;font-family:Segoe UI,system-ui,-apple-system,Roboto,Arial,sans-serif;background:#f4f7f5;color:#1f2937}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:#0f5132;color:#e8f5e9;display:flex;flex-direction:column}
+.brand{font-weight:800;font-size:22px;padding:16px 20px;background:#0c3b25}
+.nav{list-style:none;margin:0;padding:8px}
+.nav li{margin:4px 0}
+.nav a{display:flex;align-items:center;gap:10px;color:#e8f5e9;text-decoration:none;padding:10px 12px;border-radius:8px}
+.nav a:hover{background:#145a38}
+.nav a.active{background:#ffffff;color:#0f5132;position:relative;border:1px solid #e5e7eb}
+.nav a.active .icon{color:#0f5132}
+.nav a.active::before{content:'';position:absolute;left:8px;top:50%;width:6px;height:6px;background:#10b981;border-radius:999px;transform:translateY(-50%);animation:pulse-dot 1.6s ease-in-out infinite}
+@keyframes pulse-dot{0%{transform:translateY(-50%) scale(1);opacity:.9}70%{transform:translateY(-50%) scale(1.9);opacity:.25}100%{transform:translateY(-50%) scale(1);opacity:.7}}
+.icon{width:22px;text-align:center}
+.main{padding:18px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:16px}
+.header{margin:0 0 8px;color:#0f5132}
+.row{display:grid;gap:12px}
+.g-2{grid-template-columns:repeat(2,1fr)}.g-3{grid-template-columns:repeat(3,1fr)}.g-4{grid-template-columns:repeat(4,1fr)}
+.label{font-weight:700;color:#0f5132;margin-bottom:6px}
+.input,.select,.textarea{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{border:1px solid #10b981;background:#10b981;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+.btn.secondary{background:#fff;color:#065f46;border-color:#a7f3d0}
+.btn.link{background:transparent;border:none;color:#0f5132;padding:0}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px}
+.lang-toggle{display:flex;background:#e7f7ec;border-radius:8px;overflow:hidden}
+.lang-toggle button{flex:1;padding:8px 10px;border:none;background:none;cursor:pointer;font-weight:700}
+.lang-toggle .active{background:#10b981;color:#fff}
+.input-with-voice{position:relative;display:flex;align-items:center}
+.input-with-voice .voice-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;font-size:18px;color:#0f5132}
+.hint{color:#6b7280;font-size:12px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:sticky;top:0}.row.g-2,.row.g-3,.row.g-4{grid-template-columns:1fr}}
+
+/* Chatbot slider */
+.chatbot-toggle{position:fixed;right:18px;bottom:18px;z-index:9999;border:none;background:#10b981;color:#fff;border-radius:999px;width:56px;height:56px;box-shadow:0 8px 20px rgba(0,0,0,.25);cursor:pointer;font-size:22px}
+.chatbot-panel{position:fixed;right:18px;bottom:86px;width:340px;max-width:92vw;background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden;z-index:9998}
+.chatbot-header{display:flex;align-items:center;justify-content:space-between;background:#0f5132;color:#e8f5e9;padding:10px 12px}
+.chatbot-body{max-height:50vh;overflow:auto;padding:10px;background:#f9fafb}
+.chat-msg{display:flex;gap:8px;margin:6px 0}
+.chat-msg.user{justify-content:flex-end}
+.chat-bubble{max-width:75%;padding:8px 10px;border-radius:12px;border:1px solid #e5e7eb;background:#fff}
+.chat-msg.user .chat-bubble{background:#dcfce7;border-color:#bbf7d0}
+.chat-input{display:flex;gap:8px;padding:10px;border-top:1px solid #e5e7eb;background:#fff}
+.chat-input input{flex:1}
+.suggestions{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.suggestion{background:#e7f7ec;color:#065f46;border:1px solid #a7f3d0;border-radius:999px;padding:6px 10px;cursor:pointer;font-size:12px}
+
+/* Weather chips */
+.wx-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.wx-card{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:8px 10px}
+.wx-temp{font-weight:800;color:#0f5132}
+.wx-badge{display:inline-flex;align-items:center;gap:6px;background:#e7f7ec;border:1px solid #a7f3d0;color:#065f46;border-radius:999px;padding:4px 8px;font-size:12px}
+@media(max-width:540px){.wx-list{grid-template-columns:1fr}}

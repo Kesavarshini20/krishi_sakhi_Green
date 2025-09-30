@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Irrigation • Krishi Sakhi</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Krishi Sakhi</div>
+      <nav>
+        <ul class="nav">
+          <li><a href="index.html"><span class="icon"><i class="fa-solid fa-house"></i></span> <span data-i18n="home">Home</span></a></li>
+          <li><a href="profile.html"><span class="icon"><i class="fa-solid fa-user"></i></span> <span data-i18n="profile">Profile</span></a></li>
+          <li><a href="farm-details.html"><span class="icon"><i class="fa-solid fa-gear"></i></span> <span data-i18n="farm">Farm Details</span></a></li>
+          <li><a href="crops-yield.html"><span class="icon"><i class="fa-solid fa-seedling"></i></span> <span data-i18n="crops">Crops & Yield</span></a></li>
+          <li><a class="active" href="irrigation.html"><span class="icon"><i class="fa-solid fa-droplet"></i></span> <span data-i18n="irrigation">Irrigation</span></a></li>
+          <li><a href="analytics.html"><span class="icon"><i class="fa-solid fa-chart-line"></i></span> <span data-i18n="analytics">Analytics</span></a></li>
+          <li><a href="marketplace.html"><span class="icon"><i class="fa-solid fa-store"></i></span> <span data-i18n="market">Marketplace</span></a></li>
+          <li><a href="settings.html"><span class="icon"><i class="fa-solid fa-sliders"></i></span> <span data-i18n="settings">Settings</span></a></li>
+          <li><a href="weather.html"><span class="icon"><i class="fa-solid fa-cloud-sun"></i></span> <span data-i18n="weather">Weather</span></a></li>
+          <li><a href="chatbot.html"><span class="icon"><i class="fa-solid fa-robot"></i></span> <span data-i18n="chat">Chatbot</span></a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="main">
+      <div class="actions" style="justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="lang-toggle">
+          <button id="btn-en" class="active">English</button>
+          <button id="btn-ml">മലയാളം</button>
+        </div>
+      </div>
+      <div class="card">
+        <h1 class="header" data-i18n="title">Irrigation</h1>
+        <p data-i18n="desc">Manage water sources, schedules, and usage.</p>
+      </div>
+      <div class="card">
+        <h2 class="header">Water Sources</h2>
+        <div class="row g-3">
+          <div>
+            <div class="label">Source</div>
+            <select class="select" id="ir_src"><option>Canal</option><option>Well</option><option>Pond</option><option>Rainwater</option></select>
+          </div>
+          <div>
+            <div class="label">Quality</div>
+            <select class="select" id="ir_quality"><option>Good</option><option>Moderate</option><option>Poor</option></select>
+          </div>
+          <div>
+            <div class="label">Season</div>
+            <select class="select" id="ir_season"><option>Virippu</option><option>Mundakan</option><option>Puncha</option></select>
+          </div>
+          <div class="actions" style="grid-column:1/-1">
+            <button class="btn" id="ir_add_src">Add Source</button>
+          </div>
+        </div>
+        <table class="input" style="width:100%"><tbody id="ir_src_list"></tbody></table>
+      </div>
+
+      <div class="card">
+        <h2 class="header">Schedule</h2>
+        <div class="row g-3">
+          <div>
+            <div class="label">Date</div>
+            <input class="input" id="ir_date" type="date" />
+          </div>
+          <div>
+            <div class="label">Time</div>
+            <input class="input" id="ir_time" type="time" />
+          </div>
+          <div>
+            <div class="label">Duration (hours)</div>
+            <input class="input" id="ir_dur" type="number" step="0.1" placeholder="1.0" />
+          </div>
+          <div>
+            <div class="label">Method</div>
+            <select class="select" id="ir_method"><option>Drip</option><option>Sprinkler</option><option>Flood</option></select>
+          </div>
+          <div class="actions" style="grid-column:1/-1">
+            <button class="btn" id="ir_add_sch">Add to schedule</button>
+            <span class="pill">This week (hrs): <strong id="ir_week">0</strong></span>
+          </div>
+        </div>
+        <table class="input" style="width:100%"><tbody id="ir_sch_list"></tbody></table>
+      </div>
+    </main>
+  </div>
+  <script>
+    const I18N={en:{home:'Home',profile:'Profile',farm:'Farm Details',crops:'Crops & Yield',irrigation:'Irrigation',analytics:'Analytics',market:'Marketplace',settings:'Settings',title:'Irrigation',desc:'Manage water sources, schedules, and usage.'},ml:{home:'ഹോം',profile:'പ്രൊഫൈൽ',farm:'കൃഷിയിട വിവരങ്ങൾ',crops:'വിള & വിളവ്',irrigation:'ജലസേചനം',analytics:'വിശകലനം',market:'മാർക്കറ്റ്പ്ലേസ്',settings:'സെറ്റിങ്ങുകൾ',title:'ജലസേചനം',desc:'ജലസ്രോതസുകൾ, ഷെഡ്യൂൾ, ഉപയോഗം ക്രമീകരിക്കുക.'}};
+    const btnEn=document.getElementById('btn-en'), btnMl=document.getElementById('btn-ml'); function setLang(l){ document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); el.textContent=I18N[l][k]||el.textContent; }); btnEn.classList.toggle('active',l==='en'); btnMl.classList.toggle('active',l==='ml'); }
+    btnEn.addEventListener('click',()=>setLang('en')); btnMl.addEventListener('click',()=>setLang('ml')); setLang('en');
+
+    const K_SRC='green:irrigation:sources';
+    const K_SCH='green:irrigation:schedule';
+    function renderSrc(){ const t=document.getElementById('ir_src_list'); t.innerHTML=''; const arr=JSON.parse(localStorage.getItem(K_SRC)||'[]'); arr.forEach((r,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${r.source}</td><td>${r.quality}</td><td>${r.season}</td><td><button class='btn secondary' data-i='${i}'>Delete</button></td>`; t.appendChild(tr); }); t.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ const a=JSON.parse(localStorage.getItem(K_SRC)||'[]'); a.splice(+b.dataset.i,1); localStorage.setItem(K_SRC, JSON.stringify(a)); renderSrc(); })); }
+    function renderSch(){ const t=document.getElementById('ir_sch_list'); t.innerHTML=''; const arr=JSON.parse(localStorage.getItem(K_SCH)||'[]'); let week=0; const now=new Date(); const start=new Date(now); start.setDate(now.getDate()-now.getDay()); const end=new Date(start); end.setDate(start.getDate()+7); arr.forEach((r,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${r.date}</td><td>${r.time}</td><td>${r.dur} h</td><td>${r.method}</td><td><button class='btn secondary' data-i='${i}'>Delete</button></td>`; t.appendChild(tr); const d=new Date(r.date); if(d>=start&&d<end) week+=Number(r.dur)||0; }); document.getElementById('ir_week').textContent=week.toFixed(1); t.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ const a=JSON.parse(localStorage.getItem(K_SCH)||'[]'); a.splice(+b.dataset.i,1); localStorage.setItem(K_SCH, JSON.stringify(a)); renderSch(); })); }
+    document.getElementById('ir_add_src').addEventListener('click',()=>{ const a=JSON.parse(localStorage.getItem(K_SRC)||'[]'); a.push({source:ir_src.value,quality:ir_quality.value,season:ir_season.value}); localStorage.setItem(K_SRC, JSON.stringify(a)); renderSrc(); });
+    document.getElementById('ir_add_sch').addEventListener('click',()=>{ const date=ir_date.value||new Date().toISOString().slice(0,10); const a=JSON.parse(localStorage.getItem(K_SCH)||'[]'); a.push({date,time:ir_time.value||'06:00',dur:parseFloat(ir_dur.value)||1,method:ir_method.value}); localStorage.setItem(K_SCH, JSON.stringify(a)); renderSch(); });
+    renderSrc(); renderSch();
+  </script>
+  
+  <!-- Chatbot slider -->
+  <button class="chatbot-toggle" id="chatbotToggle" title="Ask Krishi Sakhi">💬</button>
+  <div class="chatbot-panel" id="chatbotPanel">
+    <div class="chatbot-header">
+      <strong>Krishi Sakhi Chat</strong>
+      <button id="chatbotClose" class="btn secondary" style="padding:4px 8px">✕</button>
+    </div>
+    <div class="chatbot-body" id="chatBody">
+      <div class="chat-msg"><div class="chat-bubble">Hi! Ask me about crops, irrigation, weather, or market prices. Try one:</div></div>
+      <div class="suggestions" id="chatSug"></div>
+    </div>
+    <div class="chat-input">
+      <input class="input" id="chatInput" placeholder="Type your question..." />
+      <button class="btn" id="chatSend">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const QA = [
+      {q:['best crop now','season','what to plant'], a:'Current season suggestions: Virippu (Apr–Sep) paddy Uma/Jyothi; vegetables like okra and cucumber.'},
+      {q:['irrigation schedule','water'], a:'Irrigation: maintain 2–5 cm water after transplanting; reduce before harvest.'},
+      {q:['fertilizer','npk'], a:'Follow soil test. Example split: 60:30:30 kg/acre (depends on crop).'},
+      {q:['market price','price'], a:'Check local Krishi Bhavan bulletin or state market portals.'},
+      {q:['weather','rain'], a:'Plan drainage in heavy rain; mulch to conserve moisture in dry spells.'}
+    ];
+    const SUG=['What to plant this season?','Irrigation schedule','Fertilizer guidance','Market price info','Weather tips'];
+    const chatToggle=document.getElementById('chatbotToggle'); const chatPanel=document.getElementById('chatbotPanel'); const chatClose=document.getElementById('chatbotClose');
+    const chatBody=document.getElementById('chatBody'); const chatInput=document.getElementById('chatInput'); const chatSend=document.getElementById('chatSend'); const chatSug=document.getElementById('chatSug');
+    function addMsg(t,u=false){ const r=document.createElement('div'); r.className='chat-msg'+(u?' user':''); const b=document.createElement('div'); b.className='chat-bubble'; b.textContent=t; r.appendChild(b); chatBody.appendChild(r); chatBody.scrollTop=chatBody.scrollHeight; }
+    function answer(q){ const t=q.toLowerCase(); const hit=QA.find(x=>x.q.some(k=>t.includes(k))); return hit?hit.a:"Sorry, try asking about irrigation, fertilizer, market, or weather."; }
+    function send(){ const v=chatInput.value.trim(); if(!v) return; addMsg(v,true); addMsg(answer(v)); chatInput.value=''; }
+    chatSend.addEventListener('click',send); chatInput.addEventListener('keydown',e=>{ if(e.key==='Enter') send(); });
+    chatToggle.addEventListener('click',()=>{ chatPanel.style.display=chatPanel.style.display==='flex'?'none':'flex'; if(chatPanel.style.display==='flex') chatInput.focus(); });
+    chatClose.addEventListener('click',()=>chatPanel.style.display='none');
+    SUG.forEach(s=>{ const b=document.createElement('button'); b.className='suggestion'; b.textContent=s; b.addEventListener('click',()=>{ chatInput.value=s; send(); }); chatSug.appendChild(b); });
+  </script>
+  
+  <!-- Weather slider -->
+  <button class="chatbot-toggle" id="weatherToggle" title="Weather">☁️</button>
+  <div class="chatbot-panel" id="weatherPanel">
+    <div class="chatbot-header">
+      <strong>14-Day Weather</strong>
+      <a href="weather.html" class="btn secondary" style="padding:4px 8px">Open</a>
+    </div>
+    <div class="chatbot-body">
+      <div id="wxPreview" class="wx-list"></div>
+      <div class="hint">Showing next days. Click Open for full 2-week forecast.</div>
+    </div>
+  </div>
+  <script>
+    async function loadWeatherPreview(){
+      const coords = await new Promise(res=>{
+        if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude, lon:p.coords.longitude}), ()=>res(null), {timeout:3000}); } else res(null);
+      });
+      const lat = coords?.lat ?? 8.5241; // Thiruvananthapuram
+      const lon = coords?.lon ?? 76.9366;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean&forecast_days=14&timezone=auto`;
+      try{
+        const r = await fetch(url); const j = await r.json();
+        const d = j.daily; const list=document.getElementById('wxPreview'); list.innerHTML='';
+        (d.time||[]).slice(0,6).forEach((date,i)=>{
+          const max=d.temperature_2m_max[i], min=d.temperature_2m_min[i], pop=(d.precipitation_probability_mean?.[i]??0);
+          const div=document.createElement('div'); div.className='wx-card';
+          div.innerHTML = `<div><div>${new Date(date).toLocaleDateString()}</div><div class='wx-badge'>Rain ${pop}%</div></div><div class='wx-temp'>${Math.round(min)}° / ${Math.round(max)}°</div>`;
+          list.appendChild(div);
+        });
+      }catch(e){ document.getElementById('wxPreview').innerHTML='<div class="hint">Weather unavailable offline</div>'; }
+    }
+    const wxToggle=document.getElementById('weatherToggle'); const wxPanel=document.getElementById('weatherPanel');
+    wxToggle.addEventListener('click',()=>{ wxPanel.style.display=wxPanel.style.display==='flex'?'none':'flex'; if(wxPanel.style.display==='flex') loadWeatherPreview(); });
+  </script>
+</body>
+</html>

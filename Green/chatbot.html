@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chatbot • Krishi Sakhi</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body{
+      background: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+                  url('https://images.unsplash.com/photo-1601288496920-00197964033a?q=80&w=1600&auto=format&fit=crop');
+      background-size: cover; background-position:center; background-attachment:fixed;
+    }
+    .chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 36px);}
+    .chat-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#0f5132;color:#e8f5e9;border-radius:12px 12px 0 0}
+    .chat-area{flex:1;overflow:auto;background:#ffffff;border:1px solid #e5e7eb;border-top:none;padding:12px}
+    .chat-controls{display:flex;gap:8px;padding:10px;border:1px solid #e5e7eb;border-top:none;background:#fff;border-radius:0 0 12px 12px}
+    .chat-msg{display:flex;gap:8px;margin:6px 0}
+    .chat-bubble{max-width:70%;padding:8px 10px;border-radius:12px;border:1px solid #e5e7eb;background:#fff}
+    .me{justify-content:flex-end}
+    .me .chat-bubble{background:#dcfce7;border-color:#bbf7d0}
+    .suggestions{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+    .suggestion{background:#e7f7ec;color:#065f46;border:1px solid #a7f3d0;border-radius:999px;padding:6px 10px;cursor:pointer;font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Krishi Sakhi</div>
+      <nav>
+        <ul class="nav">
+          <li><a href="index.html"><span class="icon"><i class="fa-solid fa-house"></i></span> <span data-i18n="home">Home</span></a></li>
+          <li><a href="profile.html"><span class="icon"><i class="fa-solid fa-user"></i></span> <span data-i18n="profile">Profile</span></a></li>
+          <li><a href="farm-details.html"><span class="icon"><i class="fa-solid fa-gear"></i></span> <span data-i18n="farm">Farm Details</span></a></li>
+          <li><a href="crops-yield.html"><span class="icon"><i class="fa-solid fa-seedling"></i></span> <span data-i18n="crops">Crops &amp; Yield</span></a></li>
+          <li><a href="irrigation.html"><span class="icon"><i class="fa-solid fa-droplet"></i></span> <span data-i18n="irrigation">Irrigation</span></a></li>
+          <li><a href="analytics.html"><span class="icon"><i class="fa-solid fa-chart-line"></i></span> <span data-i18n="analytics">Analytics</span></a></li>
+          <li><a href="marketplace.html"><span class="icon"><i class="fa-solid fa-store"></i></span> <span data-i18n="market">Marketplace</span></a></li>
+          <li><a href="settings.html"><span class="icon"><i class="fa-solid fa-sliders"></i></span> <span data-i18n="settings">Settings</span></a></li>
+          <li><a href="weather.html"><span class="icon"><i class="fa-solid fa-cloud-sun"></i></span> <span data-i18n="weather">Weather</span></a></li>
+          <li><a class="active" href="chatbot.html"><span class="icon"><i class="fa-solid fa-robot"></i></span> <span data-i18n="chat">Chatbot</span></a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="main">
+      <div class="actions" style="justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="lang-toggle">
+          <button id="btn-en" class="active">English</button>
+          <button id="btn-ml">മലയാളം</button>
+        </div>
+      </div>
+
+      <div class="chat-wrap">
+        <div class="chat-header">
+          <strong data-i18n="title">Krishi Sakhi Chatbot</strong>
+          <span class="pill" id="status">Online</span>
+        </div>
+        <div class="chat-area" id="chatArea">
+          <div class="chat-msg"><div class="chat-bubble" data-i18n="greet">Hello! Ask about crops, irrigation, fertilizer, weather, or market prices. Try tapping a suggestion below.</div></div>
+          <div class="suggestions" id="sugs"></div>
+        </div>
+        <div class="chat-controls">
+          <input class="input" id="msg" placeholder="Type your question / നിങ്ങളുടെ ചോദ്യം ടൈപ്പ് ചെയ്യുക" />
+          <button class="btn" id="send"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="send">Send</span></button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // I18N
+    const I18N={
+      en:{home:'Home',profile:'Profile',farm:'Farm Details',crops:'Crops & Yield',irrigation:'Irrigation',analytics:'Analytics',market:'Marketplace',settings:'Settings',chat:'Chatbot',title:'Krishi Sakhi Chatbot',greet:'Hello! Ask about crops, irrigation, fertilizer, weather, or market prices. Try tapping a suggestion below.',send:'Send'},
+      ml:{home:'ഹോം',profile:'പ്രൊഫൈൽ',farm:'കൃഷിയിട വിവരങ്ങൾ',crops:'വിള & വിളവ്',irrigation:'ജലസേചനം',analytics:'വിശകലനം',market:'മാർക്കറ്റ്പ്ലേസ്',settings:'സെറ്റിങ്ങുകൾ',chat:'ചാറ്റ്ബോട്ട്',title:'കൃഷി സഖി ചാറ്റ്ബോട്ട്',greet:'വിളകൾ, ജലസേചനം, വളങ്ങൾ, കാലാവസ്ഥ, മാർക്കറ്റ് വില എന്നിവ ചോദിക്കുക. താഴെയുള്ള നിർദ്ദേശങ്ങൾ ക്ലിക്ക് ചെയ്യൂ.',send:'അയക്കുക'}
+    };
+    const btnEn=document.getElementById('btn-en'); const btnMl=document.getElementById('btn-ml'); let currentLang='en';
+    function setLang(l){ currentLang=l; document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); el.textContent=I18N[l][k]||el.textContent; }); btnEn.classList.toggle('active',l==='en'); btnMl.classList.toggle('active',l==='ml'); }
+    btnEn.addEventListener('click',()=>setLang('en')); btnMl.addEventListener('click',()=>setLang('ml')); setLang('en');
+
+    // Simple QA set
+    const QA=[
+      {q:['season','what to plant','virippu','kharif'], a:'Seasonal advice: Virippu (Apr–Sep) paddy Uma/Jyothi; vegetables like okra, cucumber. Mundakan (Oct–Dec) pulses/vegetables.'},
+      {q:['paddy water','irrigation','schedule'], a:'Paddy irrigation: maintain 2–5 cm standing water after transplanting; drain before harvest; adjust per rainfall.'},
+      {q:['fertilizer','npk','manure'], a:'Follow soil test. Example split for paddy per acre: 60:30:30 NPK in three splits + FYM/compost as organic matter.'},
+      {q:['market','price'], a:'Market prices change daily; check state agri market portals or Krishi Bhavan notices for local rates.'},
+      {q:['weather','rain','monsoon'], a:'Plan drainage in waterlogged areas; use mulching in summer; consider short-duration varieties for uncertain rains.'}
+    ];
+    const SUG=['What to plant this season?','Irrigation schedule for paddy','Fertilizer guidance','Market price today','Weather tips'];
+
+    const area=document.getElementById('chatArea'); const input=document.getElementById('msg'); const send=document.getElementById('send'); const sugs=document.getElementById('sugs');
+    function add(text,me=false){ const row=document.createElement('div'); row.className='chat-msg'+(me?' me':''); const bub=document.createElement('div'); bub.className='chat-bubble'; bub.textContent=text; row.appendChild(bub); area.appendChild(row); area.scrollTop=area.scrollHeight; }
+    function reply(q){ const t=q.toLowerCase(); const hit=QA.find(x=>x.q.some(k=>t.includes(k))); return hit?hit.a:"I don't have that yet. Try asking about irrigation, fertilizer, market, or weather."; }
+    function sendMsg(){ const v=input.value.trim(); if(!v) return; add(v,true); add(reply(v)); input.value=''; save(); }
+    send.addEventListener('click',sendMsg); input.addEventListener('keydown',e=>{ if(e.key==='Enter') sendMsg(); });
+    SUG.forEach(s=>{ const b=document.createElement('button'); b.className='suggestion'; b.textContent=s; b.addEventListener('click',()=>{ input.value=s; sendMsg(); }); sugs.appendChild(b); });
+
+    // Storage of last 30 messages
+    const KEY='green:chatbot:messages';
+    function serialize(){ return [...area.querySelectorAll('.chat-msg')].map(r=>({me:r.classList.contains('me'), text:r.textContent})).slice(-30); }
+    function hydrate(){ try{ const arr=JSON.parse(localStorage.getItem(KEY)||'[]'); arr.forEach(m=>add(m.text, m.me)); }catch(e){} }
+    function save(){ try{ localStorage.setItem(KEY, JSON.stringify(serialize())); }catch(e){} }
+    hydrate();
+  </script>
+  
+  <!-- Weather slider -->
+  <button class="chatbot-toggle" id="weatherToggle" title="Weather">☁️</button>
+  <div class="chatbot-panel" id="weatherPanel">
+    <div class="chatbot-header">
+      <strong>14-Day Weather</strong>
+      <a href="weather.html" class="btn secondary" style="padding:4px 8px">Open</a>
+    </div>
+    <div class="chatbot-body">
+      <div id="wxPreview" class="wx-list"></div>
+      <div class="hint">Showing next days. Click Open for full 2-week forecast.</div>
+    </div>
+  </div>
+  <script>
+    async function loadWeatherPreview(){
+      const coords = await new Promise(res=>{
+        if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude, lon:p.coords.longitude}), ()=>res(null), {timeout:3000}); } else res(null);
+      });
+      const lat = coords?.lat ?? 8.5241; // Thiruvananthapuram
+      const lon = coords?.lon ?? 76.9366;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean&forecast_days=14&timezone=auto`;
+      try{
+        const r = await fetch(url); const j = await r.json();
+        const d = j.daily; const list=document.getElementById('wxPreview'); list.innerHTML='';
+        (d.time||[]).slice(0,6).forEach((date,i)=>{
+          const max=d.temperature_2m_max[i], min=d.temperature_2m_min[i], pop=(d.precipitation_probability_mean?.[i]??0);
+          const div=document.createElement('div'); div.className='wx-card';
+          div.innerHTML = `<div><div>${new Date(date).toLocaleDateString()}</div><div class='wx-badge'>Rain ${pop}%</div></div><div class='wx-temp'>${Math.round(min)}° / ${Math.round(max)}°</div>`;
+          list.appendChild(div);
+        });
+      }catch(e){ document.getElementById('wxPreview').innerHTML='<div class="hint">Weather unavailable offline</div>'; }
+    }
+    const wxToggle=document.getElementById('weatherToggle'); const wxPanel=document.getElementById('weatherPanel');
+    wxToggle.addEventListener('click',()=>{ wxPanel.style.display=wxPanel.style.display==='flex'?'none':'flex'; if(wxPanel.style.display==='flex') loadWeatherPreview(); });
+  </script>
+  
+  <!-- Floating chatbot slider (mini) -->
+  <button class="chatbot-toggle" id="chatbotToggleMini" title="Ask Krishi Sakhi">💬</button>
+  <div class="chatbot-panel" id="chatbotPanelMini">
+    <div class="chatbot-header">
+      <strong>Krishi Sakhi Chat</strong>
+      <button id="chatbotCloseMini" class="btn secondary" style="padding:4px 8px">✕</button>
+    </div>
+    <div class="chatbot-body" id="chatBodyMini">
+      <div class="chat-msg"><div class="chat-bubble">Hi! Ask me about crops, irrigation, weather, or market prices. Try one:</div></div>
+      <div class="suggestions" id="chatSugMini"></div>
+    </div>
+    <div class="chat-input">
+      <input class="input" id="chatInputMini" placeholder="Type your question..." />
+      <button class="btn" id="chatSendMini">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Mini slider wiring using existing QA
+    const chatToggleMini=document.getElementById('chatbotToggleMini');
+    const chatPanelMini=document.getElementById('chatbotPanelMini');
+    const chatCloseMini=document.getElementById('chatbotCloseMini');
+    const chatBodyMini=document.getElementById('chatBodyMini');
+    const chatInputMini=document.getElementById('chatInputMini');
+    const chatSendMini=document.getElementById('chatSendMini');
+    const chatSugMini=document.getElementById('chatSugMini');
+    function addMsgMini(text, user=false){
+      const row=document.createElement('div'); row.className='chat-msg'+(user?' user':'');
+      const bub=document.createElement('div'); bub.className='chat-bubble'; bub.textContent=text; row.appendChild(bub); chatBodyMini.appendChild(row); chatBodyMini.scrollTop=chatBodyMini.scrollHeight;
+    }
+    function answerMini(q){
+      const t=q.toLowerCase();
+      const hit=QA.find(x=>x.q.some(k=>t.includes(k)));
+      return hit?hit.a:"Sorry, I don't have that info yet. Try asking about irrigation, fertilizer, market prices, or weather.";
+    }
+    function sendMini(){ const v=chatInputMini.value.trim(); if(!v) return; addMsgMini(v,true); addMsgMini(answerMini(v)); chatInputMini.value=''; }
+    chatSendMini.addEventListener('click',sendMini);
+    chatInputMini.addEventListener('keydown',e=>{ if(e.key==='Enter') sendMini(); });
+    chatToggleMini.addEventListener('click',()=>{ chatPanelMini.style.display = chatPanelMini.style.display==='flex'?'none':'flex'; if(chatPanelMini.style.display==='flex'){ chatInputMini.focus(); }});
+    chatCloseMini.addEventListener('click',()=>{ chatPanelMini.style.display='none'; });
+    ;['What to plant this season?','Irrigation schedule for paddy','Fertilizer guidance','Market price info','Weather tips'].forEach(s=>{ const b=document.createElement('button'); b.className='suggestion'; b.textContent=s; b.addEventListener('click',()=>{ chatInputMini.value=s; sendMini(); }); chatSugMini.appendChild(b); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Weather • Krishi Sakhi</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Krishi Sakhi</div>
+      <nav>
+        <ul class="nav">
+          <li><a href="index.html"><span class="icon"><i class="fa-solid fa-house"></i></span> <span data-i18n="home">Home</span></a></li>
+          <li><a href="profile.html"><span class="icon"><i class="fa-solid fa-user"></i></span> <span data-i18n="profile">Profile</span></a></li>
+          <li><a href="farm-details.html"><span class="icon"><i class="fa-solid fa-gear"></i></span> <span data-i18n="farm">Farm Details</span></a></li>
+          <li><a href="crops-yield.html"><span class="icon"><i class="fa-solid fa-seedling"></i></span> <span data-i18n="crops">Crops &amp; Yield</span></a></li>
+          <li><a href="irrigation.html"><span class="icon"><i class="fa-solid fa-droplet"></i></span> <span data-i18n="irrigation">Irrigation</span></a></li>
+          <li><a href="analytics.html"><span class="icon"><i class="fa-solid fa-chart-line"></i></span> <span data-i18n="analytics">Analytics</span></a></li>
+          <li><a href="marketplace.html"><span class="icon"><i class="fa-solid fa-store"></i></span> <span data-i18n="market">Marketplace</span></a></li>
+          <li><a href="settings.html"><span class="icon"><i class="fa-solid fa-sliders"></i></span> <span data-i18n="settings">Settings</span></a></li>
+          <li><a class="active" href="weather.html"><span class="icon"><i class="fa-solid fa-cloud-sun"></i></span> <span data-i18n="weather">Weather</span></a></li>
+          <li><a href="chatbot.html"><span class="icon"><i class="fa-solid fa-robot"></i></span> <span data-i18n="chat">Chatbot</span></a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="main">
+      <div class="actions" style="justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="lang-toggle">
+          <button id="btn-en" class="active">English</button>
+          <button id="btn-ml">മലയാളം</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h1 class="header" data-i18n="title">14-Day Weather Forecast</h1>
+        <p class="hint" data-i18n="desc">Location is detected automatically if allowed. Otherwise using Kerala default.</p>
+      </div>
+
+      <div class="card">
+        <div class="row g-3">
+          <div class="pill"><i class="fa-solid fa-location-dot"></i> <span id="wxLoc">--</span></div>
+          <div class="pill"><i class="fa-solid fa-calendar"></i> <span id="wxRange">--</span></div>
+        </div>
+        <div class="wx-list" id="wxList" style="margin-top:10px"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="header" data-i18n="advice">Field Advice</h2>
+        <ul>
+          <li id="ad1">—</li>
+          <li id="ad2">—</li>
+          <li id="ad3">—</li>
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // I18N
+    const I18N={
+      en:{home:'Home',profile:'Profile',farm:'Farm Details',crops:'Crops & Yield',irrigation:'Irrigation',analytics:'Analytics',market:'Marketplace',settings:'Settings',weather:'Weather',chat:'Chatbot',title:'14-Day Weather Forecast',desc:'Location is detected automatically if allowed. Otherwise using Kerala default.',advice:'Field Advice'},
+      ml:{home:'ഹോം',profile:'പ്രൊഫൈൽ',farm:'കൃഷിയിട വിവരങ്ങൾ',crops:'വിള & വിളവ്',irrigേഷൻ:'ജലസേചനം',analytics:'വിശകലനം',market:'മാർക്കറ്റ്പ്ലേസ്',settings:'സെറ്റിങ്ങുകൾ',weather:'കാലാവസ്ഥ',chat:'ചാറ്റ്ബോട്ട്',title:'14-ദിവസത്തെ കാലാവസ്ഥ',desc:'അനുമതി നൽകിയാൽ സ്ഥലം സ്വയമേവ കണ്ടെത്തുന്നു. അല്ലാത്തപക്ഷം കേരള ഡീഫോൾട്.',advice:'വയലിനുള്ള ഉപദേശം'}
+    };
+    const btnEn=document.getElementById('btn-en'), btnMl=document.getElementById('btn-ml'); let currentLang='en';
+    function setLang(l){ currentLang=l; document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); el.textContent=I18N[l][k]||el.textContent; }); btnEn.classList.toggle('active',l==='en'); btnMl.classList.toggle('active',l==='ml'); }
+    btnEn.addEventListener('click',()=>setLang('en')); btnMl.addEventListener('click',()=>setLang('ml')); setLang('en');
+
+    // Fetch 14-day weather from Open-Meteo
+    async function fetchForecast(){
+      const coords = await new Promise(res=>{
+        if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude, lon:p.coords.longitude}), ()=>res(null), {timeout:4000}); } else res(null);
+      });
+      const lat = coords?.lat ?? 8.5241; // Thiruvananthapuram
+      const lon = coords?.lon ?? 76.9366;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_mean&forecast_days=14&timezone=auto`;
+      try{
+        const r = await fetch(url); const j = await r.json();
+        const d=j.daily; const time=d.time||[];
+        const locStr = coords? `${lat.toFixed(2)}, ${lon.toFixed(2)}` : 'Kerala (default)';
+        document.getElementById('wxLoc').textContent = locStr;
+        if(time.length){ document.getElementById('wxRange').textContent = new Date(time[0]).toLocaleDateString() + ' — ' + new Date(time[time.length-1]).toLocaleDateString(); }
+        const list=document.getElementById('wxList'); list.innerHTML='';
+        time.forEach((date,i)=>{
+          const max=d.temperature_2m_max[i], min=d.temperature_2m_min[i], pop=(d.precipitation_probability_mean?.[i]??0), code=d.weathercode?.[i]??0;
+          const icon = pop>=60? '🌧️' : (pop>=20? '🌦️' : '☀️');
+          const card=document.createElement('div'); card.className='wx-card';
+          card.innerHTML=`<div><div>${new Date(date).toLocaleDateString()}</div><div class='wx-badge'>${icon} Rain ${pop}%</div></div><div class='wx-temp'>${Math.round(min)}° / ${Math.round(max)}°</div>`;
+          list.appendChild(card);
+        });
+        // Simple advice based on next 3 days
+        const pop3 = (d.precipitation_probability_mean||[]).slice(0,3).reduce((s,x)=>s+(x||0),0)/3;
+        const hot = (d.temperature_2m_max||[]).slice(0,3).some(v=>v>=35);
+        document.getElementById('ad1').textContent = pop3>60 ? 'High rain chance: plan drainage and delay pesticide sprays.' : 'Low rain chance: consider irrigation scheduling.';
+        document.getElementById('ad2').textContent = hot ? 'High temperatures expected: schedule irrigation for early morning or evening.' : 'Moderate temperatures: normal operations recommended.';
+        document.getElementById('ad3').textContent = 'Mulch and cover young plants to conserve moisture during dry spells.';
+      }catch(e){
+        document.getElementById('wxList').innerHTML = '<div class="hint">Weather data unavailable (offline)</div>';
+      }
+    }
+    fetchForecast();
+  </script>
+  
+  <!-- Chatbot slider -->
+  <button class="chatbot-toggle" id="chatbotToggle" title="Ask Krishi Sakhi">💬</button>
+  <div class="chatbot-panel" id="chatbotPanel">
+    <div class="chatbot-header">
+      <strong>Krishi Sakhi Chat</strong>
+      <button id="chatbotClose" class="btn secondary" style="padding:4px 8px">✕</button>
+    </div>
+    <div class="chatbot-body" id="chatBody">
+      <div class="chat-msg"><div class="chat-bubble">Hi! Ask me about weather, irrigation, crops, or market prices. Try one:</div></div>
+      <div class="suggestions" id="chatSug"></div>
+    </div>
+    <div class="chat-input">
+      <input class="input" id="chatInput" placeholder="Type your question..." />
+      <button class="btn" id="chatSend">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const QA=[
+      {q:['weather','rain','forecast','temperature'], a:'Open the 14-day forecast above. Expect monsoon variability; plan drainage and mulch as needed.'},
+      {q:['irrigation'], a:'Schedule irrigation in early morning/evening. Reduce before expected rain.'},
+      {q:['fertilizer','npk'], a:'Follow soil test. Typical paddy split example 60:30:30 kg/acre in 3 splits.'},
+      {q:['market','price'], a:'Check Kerala Agri Market portals or Krishi Bhavan notices for daily rates.'}
+    ];
+    const SUG=['Will it rain this week?','Irrigation schedule tips','Fertilizer split','Market price info'];
+    const chatToggle=document.getElementById('chatbotToggle'); const chatPanel=document.getElementById('chatbotPanel'); const chatClose=document.getElementById('chatbotClose');
+    const chatBody=document.getElementById('chatBody'); const chatInput=document.getElementById('chatInput'); const chatSend=document.getElementById('chatSend'); const chatSug=document.getElementById('chatSug');
+    function addMsg(t,u=false){ const r=document.createElement('div'); r.className='chat-msg'+(u?' user':''); const b=document.createElement('div'); b.className='chat-bubble'; b.textContent=t; r.appendChild(b); chatBody.appendChild(r); chatBody.scrollTop=chatBody.scrollHeight; }
+    function answer(q){ const t=q.toLowerCase(); const hit=QA.find(x=>x.q.some(k=>t.includes(k))); return hit?hit.a:"Sorry, try asking about weather, irrigation, fertilizer, or market."; }
+    function send(){ const v=chatInput.value.trim(); if(!v) return; addMsg(v,true); addMsg(answer(v)); chatInput.value=''; }
+    chatSend.addEventListener('click',send); chatInput.addEventListener('keydown',e=>{ if(e.key==='Enter') send(); });
+    chatToggle.addEventListener('click',()=>{ chatPanel.style.display=chatPanel.style.display==='flex'?'none':'flex'; if(chatPanel.style.display==='flex') chatInput.focus(); });
+    chatClose.addEventListener('click',()=>chatPanel.style.display='none');
+    SUG.forEach(s=>{ const b=document.createElement('button'); b.className='suggestion'; b.textContent=s; b.addEventListener('click',()=>{ chatInput.value=s; send(); }); chatSug.appendChild(b); });
+  </script>
+</body>
+</html>

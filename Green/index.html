@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Krishi Sakhi • Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">Krishi Sakhi</div>
+      <nav>
+        <ul class="nav">
+          <li><a class="active" href="index.html"><span class="icon"><i class="fa-solid fa-house"></i></span> <span data-i18n="home">Home</span></a></li>
+          <li><a href="signup.html"><span class="icon"><i class="fa-solid fa-user-plus"></i></span> <span data-i18n="signup">Signup</span></a></li>
+          <li><a href="login.html"><span class="icon"><i class="fa-solid fa-right-to-bracket"></i></span> <span data-i18n="login">Login</span></a></li>
+          <li><a href="profile.html"><span class="icon"><i class="fa-solid fa-user"></i></span> <span data-i18n="profile">Profile</span></a></li>
+          <li><a href="farm-details.html"><span class="icon"><i class="fa-solid fa-gear"></i></span> <span data-i18n="farm">Farm Details</span></a></li>
+          <li><a href="crops-yield.html"><span class="icon"><i class="fa-solid fa-seedling"></i></span> <span data-i18n="crops">Crops & Yield</span></a></li>
+          <li><a href="irrigation.html"><span class="icon"><i class="fa-solid fa-droplet"></i></span> <span data-i18n="irrigation">Irrigation</span></a></li>
+          <li><a href="analytics.html"><span class="icon"><i class="fa-solid fa-chart-line"></i></span> <span data-i18n="analytics">Analytics</span></a></li>
+          <li><a href="marketplace.html"><span class="icon"><i class="fa-solid fa-store"></i></span> <span data-i18n="market">Marketplace</span></a></li>
+          <li><a href="settings.html"><span class="icon"><i class="fa-solid fa-sliders"></i></span> <span data-i18n="settings">Settings</span></a></li>
+          <li><a href="weather.html"><span class="icon"><i class="fa-solid fa-cloud-sun"></i></span> <span data-i18n="weather">Weather</span></a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="main">
+      <div class="actions" style="justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="lang-toggle">
+          <button id="btn-en" class="active">English</button>
+          <button id="btn-ml">മലയാളം</button>
+        </div>
+        <a class="btn secondary" href="signup.html"><i class="fa-solid fa-user-plus"></i> <span data-i18n="get_started">Get Started</span></a>
+      </div>
+      <div class="card">
+        <h1 class="header" data-i18n="welcome">Welcome to Krishi Sakhi</h1>
+        <p class="text" data-i18n="home_desc">Manage your farm operations, crops, water, and market in one place.</p>
+      </div>
+      <div class="row g-3">
+        <div class="card"><h2 class="header" data-i18n="module_profile">Profile</h2><p data-i18n="module_profile_desc">Maintain your personal and farm identification details.</p></div>
+        <div class="card"><h2 class="header" data-i18n="module_farm">Farm Details</h2><p data-i18n="module_farm_desc">Record land, soil, infrastructure, and GPS location.</p></div>
+        <div class="card"><h2 class="header" data-i18n="module_crops">Crops & Yield</h2><p data-i18n="module_crops_desc">Plan seasons, track growth, and record harvests.</p></div>
+        <div class="card"><h2 class="header" data-i18n="module_irrigation">Irrigation</h2><p data-i18n="module_irrigation_desc">Manage water sources, schedules, and usage.</p></div>
+        <div class="card"><h2 class="header" data-i18n="module_analytics">Analytics</h2><p data-i18n="module_analytics_desc">View trends and profitability insights.</p></div>
+        <div class="card"><h2 class="header" data-i18n="module_market">Marketplace</h2><p data-i18n="module_market_desc">Buy inputs and sell produce.</p></div>
+      </div>
+    </main>
+  </div>
+  <script>
+    // Auth gate: force login first
+    try { if(!localStorage.getItem('green:auth')) { window.location.replace('login.html'); } } catch(e) {}
+    const I18N={
+      en:{home:'Home',signup:'Signup',login:'Login',profile:'Profile',farm:'Farm Details',crops:'Crops & Yield',irrigation:'Irrigation',analytics:'Analytics',market:'Marketplace',settings:'Settings',get_started:'Get Started',welcome:'Welcome to Kerala Farmers Portal',home_desc:'Manage your farm operations, crops, water, and market in one place.',module_profile:'Profile',module_profile_desc:'Maintain your personal and farm identification details.',module_farm:'Farm Details',module_farm_desc:'Record land, soil, infrastructure, and GPS location.',module_crops:'Crops & Yield',module_crops_desc:'Plan seasons, track growth, and record harvests.',module_irrigation:'Irrigation',module_irrigation_desc:'Manage water sources, schedules, and usage.',module_analytics:'Analytics',module_analytics_desc:'View trends and profitability insights.',module_market:'Marketplace',module_market_desc:'Buy inputs and sell produce.'},
+      ml:{home:'ഹോം',signup:'രജിസ്റ്റർ',login:'ലോഗിൻ',profile:'പ്രൊഫൈൽ',farm:'കൃഷിയിട വിവരങ്ങൾ',crops:'വിള & വിളവ്',irrigation:'ജലസേചനം',analytics:'വിശകലനം',market:'മാർക്കറ്റ്പ്ലേസ്',settings:'സെറ്റിങ്ങുകൾ',get_started:'ആരംഭിക്കൂ',welcome:'കേരള കർഷക പോർട്ടലിലേക്ക് സ്വാഗതം',home_desc:'നിങ്ങളുടെ കൃഷിയിടം, വിളകൾ, ജലം, മാർക്കറ്റ് എല്ലാം ഒരിടത്ത്.',module_profile:'പ്രൊഫൈൽ',module_profile_desc:'വ്യക്തിഗതവും കൃഷിയിടവുമായ വിവരങ്ങൾ.',module_farm:'കൃഷിയിട വിവരങ്ങൾ',module_farm_desc:'ഭൂമി, മണ്ണ്, സൗകര്യങ്ങൾ, ജിപിഎസ്.',module_crops:'വിള & വിളവ്',module_crops_desc:'സീസണുകൾ പ്ലാൻ ചെയ്ത് വിള വളർച്ചയും വിളവുമുണ്ട്.',module_irrigation:'ജലസേചനം',module_irrigation_desc:'ജലസ്രോതസുകൾ, ഷെഡ്യൂളുകൾ, ഉപയോഗം.',module_analytics:'വിശകലനം',module_analytics_desc:'ട്രൻഡുകളും ലാഭപ്രാപ്തിയും.',module_market:'മാർക്കറ്റ്പ്ലേസ്',module_market_desc:'ഇൻപുട്ടുകൾ വാങ്ങൽ, ഉൽപ്പന്നം വിൽപ്പന.'}
+    };
+    const btnEn=document.getElementById('btn-en'), btnMl=document.getElementById('btn-ml');
+    function setLang(l){ document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); el.textContent=I18N[l][k]||el.textContent; }); btnEn.classList.toggle('active',l==='en'); btnMl.classList.toggle('active',l==='ml'); }
+    btnEn.addEventListener('click',()=>setLang('en')); btnMl.addEventListener('click',()=>setLang('ml'));
+    setLang('en');
+  </script>
+  
+  <!-- Chatbot slider -->
+  <button class="chatbot-toggle" id="chatbotToggle" title="Ask Krishi Sakhi">💬</button>
+  <div class="chatbot-panel" id="chatbotPanel">
+    <div class="chatbot-header">
+      <strong>Krishi Sakhi Chat</strong>
+      <button id="chatbotClose" class="btn secondary" style="padding:4px 8px">✕</button>
+    </div>
+    <div class="chatbot-body" id="chatBody">
+      <div class="chat-msg"><div class="chat-bubble">Hi! Ask me about crops, irrigation, weather, or market prices. Try one:</div></div>
+      <div class="suggestions" id="chatSug"></div>
+    </div>
+    <div class="chat-input">
+      <input class="input" id="chatInput" placeholder="Type your question..." />
+      <button class="btn" id="chatSend">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // Chatbot simple Q&A
+    const QA = [
+      {q:['best crop now','season','what to plant'], a:'Current season suggestions: Virippu (Apr–Sep) paddy varieties like Uma/Jyothi; vegetables like okra and cucumber.'},
+      {q:['irrigation schedule','water'], a:'Irrigation advice: For paddy, maintain 2–5 cm water depth after transplanting; reduce before harvest. Use schedules based on rainfall.'},
+      {q:['fertilizer','npk'], a:'General NPK guidance: Follow soil test. Typical paddy split (example): 60:30:30 kg/acre in 3 splits.'},
+      {q:['market price','price'], a:'Market prices vary daily. Check local Krishi Bhavan bulletin or state Agri Market portals.'},
+      {q:['weather','rain'], a:'Expect monsoon variability; plan drainage in waterlogged areas and mulch in summer to conserve moisture.'}
+    ];
+    const SUG = ['What to plant this season?','Irrigation schedule for paddy','Fertilizer guidance','Market price info','Weather tips'];
+    const chatToggle=document.getElementById('chatbotToggle');
+    const chatPanel=document.getElementById('chatbotPanel');
+    const chatClose=document.getElementById('chatbotClose');
+    const chatBody=document.getElementById('chatBody');
+    const chatInput=document.getElementById('chatInput');
+    const chatSend=document.getElementById('chatSend');
+    const chatSug=document.getElementById('chatSug');
+    function addMsg(text, user=false){
+      const row=document.createElement('div'); row.className='chat-msg'+(user?' user':'');
+      const bub=document.createElement('div'); bub.className='chat-bubble'; bub.textContent=text; row.appendChild(bub); chatBody.appendChild(row); chatBody.scrollTop=chatBody.scrollHeight;
+    }
+    function answer(q){
+      const t=q.toLowerCase();
+      const hit=QA.find(x=>x.q.some(k=>t.includes(k)));
+      return hit?hit.a:"Sorry, I don't have that info yet. Try asking about irrigation, fertilizer, market prices, or weather.";
+    }
+    function send(){ const v=chatInput.value.trim(); if(!v) return; addMsg(v,true); addMsg(answer(v)); chatInput.value=''; }
+    chatSend.addEventListener('click',send);
+    chatInput.addEventListener('keydown',e=>{ if(e.key==='Enter') send(); });
+    chatToggle.addEventListener('click',()=>{ chatPanel.style.display = chatPanel.style.display==='flex'?'none':'flex'; if(chatPanel.style.display==='flex'){ chatInput.focus(); }});
+    chatClose.addEventListener('click',()=>{ chatPanel.style.display='none'; });
+    SUG.forEach(s=>{ const b=document.createElement('button'); b.className='suggestion'; b.textContent=s; b.addEventListener('click',()=>{ chatInput.value=s; send(); }); chatSug.appendChild(b); });
+  </script>
+
+  <!-- Weather slider -->
+  <button class="chatbot-toggle" id="weatherToggle" title="Weather">☁️</button>
+  <div class="chatbot-panel" id="weatherPanel">
+    <div class="chatbot-header">
+      <strong>14-Day Weather</strong>
+      <a href="weather.html" class="btn secondary" style="padding:4px 8px">Open</a>
+    </div>
+    <div class="chatbot-body">
+      <div id="wxPreview" class="wx-list"></div>
+      <div class="hint">Showing next days. Click Open for full 2-week forecast.</div>
+    </div>
+  </div>
+  <script>
+    async function loadWeatherPreview(){
+      const coords = await (new Promise(res=>{
+        if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude, lon:p.coords.longitude}), ()=>res(null), {timeout:3000}); } else res(null);
+      }));
+      const lat = coords?.lat ?? 8.5241; // Thiruvananthapuram
+      const lon = coords?.lon ?? 76.9366;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_mean&forecast_days=14&timezone=auto`;
+      try{
+        const r = await fetch(url); const j = await r.json();
+        const d = j.daily; const list=document.getElementById('wxPreview'); list.innerHTML='';
+        (d.time||[]).slice(0,6).forEach((date,i)=>{
+          const max=d.temperature_2m_max[i], min=d.temperature_2m_min[i], pop=(d.precipitation_probability_mean?.[i]??0);
+          const div=document.createElement('div'); div.className='wx-card';
+          div.innerHTML = `<div><div>${new Date(date).toLocaleDateString()}</div><div class='wx-badge'>Rain ${pop}%</div></div><div class='wx-temp'>${Math.round(min)}° / ${Math.round(max)}°</div>`;
+          list.appendChild(div);
+        });
+      }catch(e){ document.getElementById('wxPreview').innerHTML='<div class="hint">Weather unavailable offline</div>'; }
+    }
+    const wxToggle=document.getElementById('weatherToggle'); const wxPanel=document.getElementById('weatherPanel');
+    wxToggle.addEventListener('click',()=>{ wxPanel.style.display=wxPanel.style.display==='flex'?'none':'flex'; if(wxPanel.style.display==='flex') loadWeatherPreview(); });
+  </script>
+</body>
+</html>
